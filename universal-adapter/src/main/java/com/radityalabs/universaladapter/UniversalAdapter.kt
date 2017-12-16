@@ -17,24 +17,31 @@ interface Universal<in T> {
     fun safeRemove(item : T?)
 }
 
-class UniversalAdapter<T : Any, VH : RecyclerView.ViewHolder>(
+class UniversalAdapter<T, VH : RecyclerView.ViewHolder>(
         private val onCreateViewHolder: (ViewGroup?, Int) -> VH,
         private val onBindViewHolder: (VH, Int, T) -> Unit,
-        private val onViewType: ((viewType: Int) -> Int)? = null) : RecyclerView.Adapter<VH>(),
+        private val onViewType: ((Int) -> Int)? = null) : RecyclerView.Adapter<VH>(),
         Universal<T> {
 
     var items = mutableListOf<T>()
         private set
 
-    override fun onBindViewHolder(holder: VH, position: Int) {
-        onBindViewHolder(holder, position, items[position])
-    }
+    var onGetItemViewType: ((position: Int) -> Int)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): VH =
             onCreateViewHolder.invoke(parent, viewType)
 
+    override fun onBindViewHolder(holder: VH, position: Int) {
+        onBindViewHolder.invoke(holder, position, items[position])
+    }
+
     override fun getItemViewType(position: Int): Int {
-        return onViewType?.invoke(position) ?: super.getItemViewType(position)
+        return if (onViewType != null) {
+            onViewType.invoke(position)
+        } else {
+            val onGetItemViewType = onGetItemViewType
+            onGetItemViewType?.invoke(position) ?: super.getItemViewType(position)
+        }
     }
 
     override fun getItemCount() = items.size
