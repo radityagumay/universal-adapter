@@ -1,4 +1,4 @@
-package com.radityalabs.universaladapter.android;
+package com.radityalabs.universaladapter;
 
 import org.junit.Test;
 

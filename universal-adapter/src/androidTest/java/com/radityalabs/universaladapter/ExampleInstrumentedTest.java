@@ -1,4 +1,4 @@
-package com.radityalabs.universaladapter.android;
+package com.radityalabs.universaladapter;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
