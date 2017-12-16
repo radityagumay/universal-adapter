@@ -1,5 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'maven-publish'
 
 ext {
     bintrayRepo = 'android'
@@ -42,6 +44,14 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+}
+
+bintray {
+    override = true
+}
+
+tasks.withType(Javadoc).all {
+    enabled = false
 }
 
 dependencies {
