@@ -5,3 +5,5 @@ The most boilerplate piece in developing application in Android is create a List
 4. Create a List Item widget for ViewHolder
 
 Doing a repetitive code is not DRY at all. We wasting time to create such things. In that time, i was thinking how to reduce amount of class in doing create List UI Component.
+
+Blog here https://medium.com/@gumay.raditya/universal-adapter-for-android-2f4f07cdae53
