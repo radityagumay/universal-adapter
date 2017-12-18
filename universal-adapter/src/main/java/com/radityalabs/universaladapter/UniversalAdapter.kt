@@ -12,7 +12,7 @@ interface Universal<in T> {
 
     fun updateRange(vararg items: T)
 
-    fun remove(item: T)
+    fun remove(item: T, position: Int)
 
     fun removeRange(vararg items: T)
 }
@@ -47,23 +47,29 @@ class UniversalAdapter<T, VH : RecyclerView.ViewHolder>(
         notifyItemInserted(this.items.size)
     }
 
-    override fun remove(item: T) {
+    override fun remove(item: T, position: Int) {
         this.items.remove(item)
+        notifyItemRemoved(position)
     }
 
     override fun removeRange(vararg items: T) {
-        items.forEach { remove(it) }
+        items.forEachIndexed { index, item -> remove(item, index) }
     }
 
     override fun update(item: T) {
-        items.forEachIndexed { index, i -> if (i == item) { items[index] = item } }
+        items.forEachIndexed { index, i -> if (i == item) {
+            items[index] = item
+            notifyItemChanged(index) } }
     }
 
     override fun updateRange(vararg items: T) {
         for (i in 0 until this.items.size) {
             (0 until items.size)
                     .filter { i == it }
-                    .forEach { this.items[i] = items[it] }
+                    .forEach {
+                        this.items[i] = items[it]
+                        update(this.items[i])
+                    }
         }
     }
 }
