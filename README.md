@@ -8,7 +8,7 @@ The most boilerplate piece in developing application in Android is create a List
 
 Doing a repetitive code is not DRY at all. We wasting time to create such things. In that time, i was thinking how to reduce amount of class in doing create List UI Component.
 
-
+<code>
 implementation 'com.radityalabs.universaladapter:universal-adapter:0.0.2'
 ....
 repositories {
@@ -17,5 +17,6 @@ repositories {
         url 'https://dl.bintray.com/radityagumay/android/'
     }
 }
+</code>
 
 Blog here https://medium.com/@gumay.raditya/universal-adapter-for-android-2f4f07cdae53
