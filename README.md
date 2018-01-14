@@ -17,10 +17,16 @@ Blog here https://medium.com/@gumay.raditya/universal-adapter-for-android-2f4f07
 * Add the following to your project level `build.gradle`:
 
 ```
+if you using jcenter
+repositories {
+        jcenter()
+}
+
 implementation 'com.radityalabs.universaladapter:universal-adapter:0.0.2'
 ```
 
 ```
+if  you using maven
 maven {
   url 'https://dl.bintray.com/radityagumay/android/'
 }
