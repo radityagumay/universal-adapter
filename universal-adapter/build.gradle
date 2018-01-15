@@ -16,7 +16,7 @@ ext {
     siteUrl = 'https://github.com/radityagumay/universal-adapter'
     gitUrl = 'https://github.com/radityagumay/universal-adapter.git'
 
-    libraryVersion = '0.0.2'
+    libraryVersion = '0.0.3'
 
     developerId = 'radityagumay'
     developerName = 'radityagumay'

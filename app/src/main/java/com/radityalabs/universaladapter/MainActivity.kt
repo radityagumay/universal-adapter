@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.content_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var adapter: UniversalAdapter<Foo, RecyclerView.ViewHolder>
+    private lateinit var adapter: UniversalAdapter<ViewHolder.Foo, RecyclerView.ViewHolder>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,60 +30,82 @@ class MainActivity : AppCompatActivity() {
 
     private fun initView() {
         adapter = UniversalAdapter({ parent, viewType ->
-            if (viewType == 1) { FooViewHolder.inflate(parent) } else { BarViewHolder.inflate(parent) }
+            if (viewType == 1) {
+                ViewHolder.FooViewHolder.inflate(parent)
+            } else {
+                ViewHolder.BarViewHolder.inflate(parent)
+            }
         }, { vh, _, item ->
-            if (item.type == 1) { (vh as FooViewHolder).bind(item) } else { (vh as BarViewHolder).bind(item) }
+            if (item.type == 1) {
+                (vh as ViewHolder.FooViewHolder).bind(item)
+            } else {
+                (vh as ViewHolder.BarViewHolder).bind(item)
+            }
         }, { position ->
-            if (adapter.items[position].type == 1) { 1 } else { 2 }
+            if (adapter.items[position].type == 1) {
+                ViewHolder.FOO_TYPE
+            } else {
+                ViewHolder.BAR_TYPE
+            }
         })
 
-        with(recycle) {
+        recycle.apply {
             adapter = this@MainActivity.adapter
-            layoutManager = LinearLayoutManager(this@MainActivity, LinearLayoutManager.VERTICAL, false)
-        }
+        }.vertical()
     }
 
     private fun initData() {
         adapter.addAll(datas())
     }
 
-    private fun datas(): List<Foo> {
-        val items = mutableListOf<Foo>()
-        items.add(Foo("Title BAAR", "BAAR", 1))
-        return (0 until 10).mapTo(items) { Foo("Title $it", "Message $it", 2) }
+    private fun datas(): List<ViewHolder.Foo> {
+        val items = mutableListOf<ViewHolder.Foo>()
+        items.add(ViewHolder.Foo("Title BAAR", "BAAR", 1))
+        return (0 until 10).mapTo(items) { ViewHolder.Foo("Title $it", "Message $it", 2) }
     }
 }
 
-class FooViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+fun RecyclerView.vertical() {
+    layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+}
+
+sealed class ViewHolder {
     companion object {
-        fun inflate(parent: ViewGroup?) =
-                FooViewHolder(LayoutInflater.from(parent?.context)
-                        .inflate(R.layout.activity_main_item, parent, false))
+        val FOO_TYPE = 1
+        val BAR_TYPE = 1
     }
 
-    private val title = view.title
-    private val message = view.message
+    class FooViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        companion object {
+            fun inflate(parent: ViewGroup?) =
+                    FooViewHolder(LayoutInflater.from(parent?.context)
+                            .inflate(R.layout.activity_main_item, parent, false))
+        }
 
-    fun bind(item: Foo) {
-        title.text = item.title
-        message.text = item.message
+        private val title = view.title
+        private val message = view.message
+
+        fun bind(item: Foo) {
+            title.text = item.title
+            message.text = item.message
+        }
     }
+
+    class BarViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        companion object {
+            fun inflate(parent: ViewGroup?) =
+                    BarViewHolder(LayoutInflater.from(parent?.context)
+                            .inflate(R.layout.activity_main_bar_item, parent, false))
+        }
+
+        private val message = view.barbar
+
+        fun bind(item: Foo) {
+            message.text = item.message
+        }
+    }
+
+    data class Foo(val title: String,
+                   val message: String,
+                   val type: Int)
 }
-
-class BarViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    companion object {
-        fun inflate(parent: ViewGroup?) =
-                BarViewHolder(LayoutInflater.from(parent?.context)
-                        .inflate(R.layout.activity_main_bar_item, parent, false))
-    }
-
-    private val message = view.barbar
-
-    fun bind(item: Foo) {
-        message.text = item.message
-    }
-}
-
-data class Foo(val title: String,
-               val message: String,
-               val type: Int)
