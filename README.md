@@ -22,7 +22,7 @@ repositories {
         jcenter()
 }
 
-implementation 'com.radityalabs.universaladapter:universal-adapter:0.0.2'
+implementation 'com.radityalabs.universaladapter:universal-adapter:0.0.3'
 ```
 
 ```
@@ -72,10 +72,9 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        with(recycle) {
+        recycle.apply {
             adapter = this@MainActivity.adapter
-            layoutManager = LinearLayoutManager(this@MainActivity, LinearLayoutManager.VERTICAL, false)
-        }
+        }.vertical()
     }
 
     private fun initData() {
@@ -87,6 +86,10 @@ class MainActivity : AppCompatActivity() {
         items.add(ViewHolder.Foo("Title BAAR", "BAAR", 1))
         return (0 until 10).mapTo(items) { ViewHolder.Foo("Title $it", "Message $it", 2) }
     }
+}
+
+fun RecyclerView.vertical() {
+    layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 }
 
 sealed class ViewHolder {
