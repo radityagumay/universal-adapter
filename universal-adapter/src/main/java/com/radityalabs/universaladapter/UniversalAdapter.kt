@@ -4,6 +4,8 @@ import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 
 interface Universal<in T> {
+    fun addAll(items: Collection<T>)
+
     fun addAll(items: List<T>)
 
     fun add(item: T)
@@ -11,6 +13,8 @@ interface Universal<in T> {
     fun update(item: T)
 
     fun updateRange(vararg items: T)
+
+    fun updateRange(startPosition: Int, vararg items: T)
 
     fun remove(item: T, position: Int)
 
@@ -24,7 +28,6 @@ class UniversalAdapter<T, VH : RecyclerView.ViewHolder>(
         private val onBindViewHolder: (VH, Int, T) -> Unit,
         private val onViewType: ((Int) -> Int)? = null) : RecyclerView.Adapter<VH>(),
         Universal<T> {
-
     var items = mutableListOf<T>()
         private set
 
@@ -38,6 +41,11 @@ class UniversalAdapter<T, VH : RecyclerView.ViewHolder>(
     override fun getItemViewType(position: Int) = onViewType?.invoke(position) ?: super.getItemViewType(position)
 
     override fun getItemCount() = items.size
+
+    override fun addAll(items: Collection<T>) {
+        this.items.addAll(items)
+        notifyDataSetChanged()
+    }
 
     override fun addAll(items: List<T>) {
         this.items.addAll(items)
@@ -76,6 +84,13 @@ class UniversalAdapter<T, VH : RecyclerView.ViewHolder>(
                         update(this.items[i])
                     }
         }
+    }
+
+    override fun updateRange(startPosition: Int, vararg items: T) {
+        for (i in startPosition until items.size) {
+            this.items[i] = items[i]
+        }
+        notifyItemRangeChanged(startPosition, items.size)
     }
 
     override fun clearAndAddAll(collection: List<T>) {
