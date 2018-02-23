@@ -1,4 +1,4 @@
-`version 0.0.3`
+`version 0.0.4`
 
 ## Summary
 
@@ -22,7 +22,7 @@ repositories {
         jcenter()
 }
 
-implementation 'com.radityalabs.universaladapter:universal-adapter:0.0.3'
+implementation 'com.radityalabs.universaladapter:universal-adapter:0.0.4'
 ```
 
 ```
