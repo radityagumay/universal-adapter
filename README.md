@@ -1,4 +1,4 @@
-`version 0.0.4`
+`version 1.0.0`
 
 ## Summary
 
@@ -52,23 +52,25 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initView() {
-        adapter = UniversalAdapter({ parent, viewType ->
-            if (viewType == 1) {
-                ViewHolder.FooViewHolder.inflate(parent)
-            } else {
-                ViewHolder.BarViewHolder.inflate(parent)
+         adapter = UniversalAdapter({ parent, viewType ->
+            when (viewType) {
+                1 -> ViewHolder.FooViewHolder.inflate(parent)
+                else -> ViewHolder.BarViewHolder.inflate(parent)
             }
         }, { vh, _, item ->
-            if (item.type == 1) {
-                (vh as ViewHolder.FooViewHolder).bind(item)
-            } else {
-                (vh as ViewHolder.BarViewHolder).bind(item)
+            when (vh) {
+                is ViewHolder.FooViewHolder -> vh.bind(item)
+                is ViewHolder.BarViewHolder -> vh.bind(item)
             }
         }, { position ->
-            if (adapter.items[position].type == 1) {
-                ViewHolder.FOO_TYPE
-            } else {
-                ViewHolder.BAR_TYPE
+            when (adapter.items[position].type) {
+                1 -> ViewHolder.FOO_TYPE
+                else -> ViewHolder.BAR_TYPE
+            }
+        }, onDetachedFromWindow = { vh ->
+            when (vh) {
+                is ViewHolder.FooViewHolder -> vh.unBind()
+                is ViewHolder.BarViewHolder -> vh.unBind()
             }
         })
 
@@ -112,6 +114,10 @@ sealed class ViewHolder {
             title.text = item.title
             message.text = item.message
         }
+        
+        fun unBind() {
+            // unbind resource for example compositeDisposable or something
+        }
     }
 
     class BarViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -126,6 +132,8 @@ sealed class ViewHolder {
         fun bind(item: Foo) {
             message.text = item.message
         }
+        
+        fun unBind() {}
     }
 
     data class Foo(val title: String,
