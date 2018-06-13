@@ -1,1 +1,1 @@
-include ':app', ':universal-adapter'
+include ':app', ':library'
