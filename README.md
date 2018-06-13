@@ -22,7 +22,7 @@ repositories {
         jcenter()
 }
 
-implementation 'com.radityalabs.universaladapter:universal-adapter:0.0.4'
+implementation 'com.radityalabs.universaladapter:universal-adapter:1.0.0'
 ```
 
 ```
